@@ -3,3 +3,4 @@ token.json
 .streamlit/
 __pycache__/
 ig/
+.gitignore
