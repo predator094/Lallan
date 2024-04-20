@@ -1,16 +1,8 @@
 import streamlit as st
-from langchain.prompts import MessagesPlaceholder
-from langchain.agents import initialize_agent, AgentType
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.memory import ConversationSummaryBufferMemory
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.callbacks import get_openai_callback, StreamlitCallbackHandler
-from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain_pinecone import PineconeVectorStore
-from langchain.prompts import PromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
-from chain import conversational_rag_chain
+
+from chat import chat_engine
 import json
 import os
 
@@ -59,7 +51,7 @@ if "inpu" not in st.session_state:
 if "email" not in st.session_state:
     st.session_state.email = ""
 if "rag_chain" not in st.session_state:
-    st.session_state.rag_chain = conversational_rag_chain
+    st.session_state.rag_chain = chat_engine
 
 
 # form
@@ -77,15 +69,6 @@ with st.form("my_form"):
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-prompt_template = PromptTemplate.from_template(
-    "You are an expert informator system about Lucknow, I'll give you question and context and you'll return the answer in a sweet and sarcastic tone. You will use Hum instead of main. Your name is Lallan. The full form of Lallan is 'Lucknow Artificial Language and Learning Assistance Network'. Call only Janab-e-Alaa instead of phrase My dear Friend. Say Salaam Miya! instead of Greetings. Here is the prompt\n{question}\nanswer it using the following context\n{context}."
-)
-
-
-msgs = StreamlitChatMessageHistory()
-agent_kwargs = {
-    "extra_prompt_messages": [MessagesPlaceholder(variable_name="chat_history")],
-}
 
 
 if prompt := st.chat_input(
@@ -94,10 +77,7 @@ if prompt := st.chat_input(
     st.chat_message("user").markdown(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("assistant"):
-        a = conversational_rag_chain.invoke(
-            {"input": prompt},
-            config={"configurable": {"session_id": st.session_state.email}},
-        )["answer"]
+        a = st.session_state.rag_chain.chat(prompt).response
         st.markdown(a)
     email_filename = os.path.join(
         "queries", f"{st.session_state.email.split('@')[0]}.json"
