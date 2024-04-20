@@ -22,11 +22,6 @@ st.set_page_config(
 )
 
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-pro", temperature=0.5, google_api_key=st.secrets["GOOGLE_API_KEY"]
-)
-
-
 # json upload
 def write_to_json(data, filename):
     if os.path.exists(filename):
@@ -84,25 +79,6 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 prompt_template = PromptTemplate.from_template(
     "You are an expert informator system about Lucknow, I'll give you question and context and you'll return the answer in a sweet and sarcastic tone. You will use Hum instead of main. Your name is Lallan. The full form of Lallan is 'Lucknow Artificial Language and Learning Assistance Network'. Call only Janab-e-Alaa instead of phrase My dear Friend. Say Salaam Miya! instead of Greetings. Here is the prompt\n{question}\nanswer it using the following context\n{context}."
-)
-
-
-def format_docs(docs):
-    return "\n\n".join(doc.page_content for doc in docs)
-
-
-rag_chain = (
-    {
-        "context": st.session_state.doc.as_retriever(
-            search_type="similarity_score_threshold",
-            search_kwargs={"k": 6, "score_threshold": 0.7},
-        )
-        | format_docs,
-        "question": RunnablePassthrough(),
-    }
-    | prompt_template
-    | llm
-    | StrOutputParser()
 )
 
 

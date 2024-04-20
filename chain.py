@@ -17,7 +17,7 @@ from langchain_pinecone import PineconeVectorStore
 embeddings = HuggingFaceEmbeddings()
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-pro", temperature=0.5, convert_system_message_to_human=True
+    model="gemini-1.5-pro-latest", temperature=0.5, convert_system_message_to_human=True
 )
 
 docsearch = PineconeVectorStore(index_name="lai-rag", embedding=embeddings)
