@@ -1,9 +1,6 @@
 import streamlit as st
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_pinecone import PineconeVectorStore
-
 from chat import chat_engine
-import json
+from utils import write_to_json
 import os
 
 st.set_page_config(
@@ -14,47 +11,19 @@ st.set_page_config(
 )
 
 
-# json upload
-def write_to_json(data, filename):
-    if os.path.exists(filename):
-        with open(filename, "r") as file:
-            existing_data = json.load(file)
-        # Check if the email already exists in the file
-        if "email" in data:
-            existing_emails = [
-                entry["email"] for entry in existing_data if "email" in entry
-            ]
-            if data["email"] in existing_emails:
-                return
-        existing_data.append(data)
-        with open(filename, "w") as file:
-            json.dump(existing_data, file, indent=4)
-    else:
-        with open(filename, "w") as file:
-            json.dump([data], file, indent=4)
-
-
-# session states
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-if "embeddings" not in st.session_state:
-    st.session_state.embeddings = HuggingFaceEmbeddings()
-if "doc" not in st.session_state:
-    st.session_state.doc = PineconeVectorStore(
-        index_name="lai-rag",
-        embedding=st.session_state.embeddings,
-        pinecone_api_key=st.secrets["PINECONE_API_KEY"],
-    )
-if "inpu" not in st.session_state:
-    st.session_state.inpu = False
-
-if "email" not in st.session_state:
-    st.session_state.email = ""
+# Load chat engine
 if "rag_chain" not in st.session_state:
     st.session_state.rag_chain = chat_engine
 
+# Load previous messages and email
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+if "email" not in st.session_state:
+    st.session_state.email = ""
+if "inpu" not in st.session_state:
+    st.session_state.inpu = False
 
-# form
+# Form for email input
 with st.form("my_form"):
     st.header("Enter you email")
     email = st.text_input("Email")
@@ -64,13 +33,12 @@ with st.form("my_form"):
         st.session_state.email = email
         st.session_state.inpu = True
 
-
-#####
+# Display previous messages
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-
+# User input and assistant response
 if prompt := st.chat_input(
     "Farmaiye Janaab", disabled=False if st.session_state.inpu == True else True
 ):
