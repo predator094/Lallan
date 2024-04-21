@@ -7,15 +7,23 @@ def write_to_json(data, filename):
         with open(filename, "r") as file:
             existing_data = json.load(file)
         # Check if the email already exists in the file
-        if "email" in data:
+        if "user" in data:
             existing_emails = [
-                entry["email"] for entry in existing_data if "email" in entry
+                entry["user"] for entry in existing_data if "user" in entry
             ]
-            if data["email"] in existing_emails:
+            if data["user"] in existing_emails:
                 return
         existing_data.append(data)
         with open(filename, "w") as file:
             json.dump(existing_data, file, indent=4)
+    else:
+        with open(filename, "w") as file:
+            json.dump([data], file, indent=4)
+
+
+def fc(user_id):
+    email_filename = "queries" + f"\{user_id}.json"
+    return email_filename
 
 
 def format_docs(docs):
