@@ -1,7 +1,7 @@
 import streamlit as st
 from utils import write_to_json
 import os
-from rag_chain import rag_chain
+from rchain import rag_chain
 
 st.set_page_config(
     page_title="Lallan Lucknow AI",
