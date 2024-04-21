@@ -1,0 +1,53 @@
+[
+    {
+        "error_message": "'list' object is not callable"
+    },
+    {
+        "error_message": "Object of type ChatMessage is not JSON serializable"
+    },
+    {
+        "error_message": "Expecting value: line 2 column 5 (char 6)"
+    },
+    {
+        "error_message": "write() argument must be str, not list"
+    },
+    {
+        "error_message": "write() argument must be str, not list"
+    },
+    {
+        "error_message": "write() argument must be str, not list"
+    },
+    {
+        "error_message": "write() argument must be str, not list"
+    },
+    {
+        "error_message": "write() argument must be str, not list"
+    },
+    {
+        "error_message": "Expecting value: line 2 column 5 (char 6)"
+    },
+    {
+        "error_message": "Object of type ChatMessage is not JSON serializable"
+    },
+    {
+        "error_message": "Object of type ChatMessage is not JSON serializable"
+    },
+    {
+        "error_message": "Object of type ChatMessage is not JSON serializable"
+    },
+    {
+        "error_message": "Object of type ChatMessage is not JSON serializable"
+    },
+    {
+        "error_message": "'GenerativeModel' object has no attribute '_system_instruction'"
+    },
+    {
+        "error_message": "'GenerativeModel' object has no attribute '_system_instruction'"
+    },
+    {
+        "error_message": "'GenerativeModel' object has no attribute '_system_instruction'"
+    },
+    {
+        "error_message": "'GenerativeModel' object has no attribute '_system_instruction'"
+    }
+]
